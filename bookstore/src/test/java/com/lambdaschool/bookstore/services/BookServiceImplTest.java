@@ -14,6 +14,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.persistence.EntityNotFoundException;
+
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
@@ -44,7 +47,7 @@ public class BookServiceImplTest
     @Test
     public void findAll()
     {
-        assertEquals(5, bookService.findAll().size());
+        assertEquals(4, bookService.findAll().size());
     }
 
     @Test
@@ -66,6 +69,11 @@ public class BookServiceImplTest
         assertEquals(4, bookService.findAll().size());
     }
 
+    @Test(expected = EntityNotFoundException.class)
+    public void deleteNotFound(){
+        bookService.delete(1000);
+    }
+
     @Test
     public void save()
     {
@@ -78,13 +86,29 @@ public class BookServiceImplTest
         b5.getWrotes().add(new Wrote(a3, b5));
     }
 
+
     @Test
     public void update()
     {
+        Section s1 = new Section("Fiction");
+        s1.setSectionid(21);
+
+        Author a3 = new Author("Jerry", "Poe");
+        a3.setAuthorid(20);
+
+        Book b5 = new Book("Test Book", "9780738206779", 2020, s1);
+        b5.getWrotes().add(new Wrote(a3, b5));
+
+        Book updatedb5 = bookService.update(b5, 27);
+
+        assertEquals("Test Book", updatedb5.getTitle());
+
     }
 
     @Test
     public void deleteAll()
     {
+        bookService.deleteAll();
+        assertEquals(0, bookService.findAll().size());
     }
 }
