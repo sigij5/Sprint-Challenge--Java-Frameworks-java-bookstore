@@ -63,7 +63,7 @@ public class ResourceServerConfig
                 .antMatchers(HttpMethod.GET, "/books/**")
                 .hasAnyRole("ADMIN", "DATA")
                 .antMatchers("/books/**")
-                .authenticated()
+                .hasAnyRole("ADMIN")
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(new OAuth2AccessDeniedHandler());

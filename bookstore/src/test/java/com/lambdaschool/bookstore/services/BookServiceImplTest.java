@@ -2,6 +2,10 @@ package com.lambdaschool.bookstore.services;
 
 import com.lambdaschool.bookstore.BookstoreApplication;
 import com.lambdaschool.bookstore.exceptions.ResourceNotFoundException;
+import com.lambdaschool.bookstore.models.Author;
+import com.lambdaschool.bookstore.models.Book;
+import com.lambdaschool.bookstore.models.Section;
+import com.lambdaschool.bookstore.models.Wrote;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,21 +50,32 @@ public class BookServiceImplTest
     @Test
     public void findBookById()
     {
+        assertEquals("Flatterland", bookService.findBookById(26).getTitle());
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void notFindBookById()
     {
+        assertEquals("Flatterland", bookService.findBookById(1000).getTitle());
     }
 
     @Test
     public void delete()
     {
+        bookService.delete(26);
+        assertEquals(4, bookService.findAll().size());
     }
 
     @Test
     public void save()
     {
+        Section s1 = new Section("Fiction");
+
+        Book b5 = new Book("Test Book", "9780738206779", 2020, s1);
+
+        Author a3 = new Author("Jerry", "Poe");
+
+        b5.getWrotes().add(new Wrote(a3, b5));
     }
 
     @Test
